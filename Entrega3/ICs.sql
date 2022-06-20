@@ -33,12 +33,35 @@ RI-5
 CREATE OR REPLACE FUNCTION	chk_cat_names_proc()	
 RETURNS TRIGGER AS
 $$
-BEGIN			
-		IF	evento_reposicao.ean == produto.ean  THEN
-            IF evento_reposicao.unidades > planograma.unidades
+BEGIN	
+		IF	prateleria.nome != (SELECT cat FROM Produto WHERE Produto.ean IN evento_reposicao) AS ProdCat THEN
+			WITH RECURSIVE categorias AS (
+				SELECT
+					categoria,
+					super_categoria
+				FROM
+					tem_outra
+				WHERE
+					categoria = prateleria.nome
+				UNION
+					SELECT
+						c.categoria,
+						c.super_categoria
+					FROM
+						tem_outra c
+					INNER JOIN categorias cat ON cat.categoria = c.super_categoria
+			) SELECT
+				*
+			FROM
+				categorias;	
+			WHERE
+				ProdCat IN categorias
+			AS
+				final
+			IF	(SELECT count(*) AS nr_col FROM final) == 0 THEN
 				RAISE   EXCEPTION	'Error'
-            END IF;
+			END IF;
 		END IF;	
-		RETURN tem_outra;
+		RETURN categorias;
 END;
 $$	
