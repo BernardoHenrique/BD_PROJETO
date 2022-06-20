@@ -1,6 +1,7 @@
-CREATE VIEW Vendas(ean, cat, ano, trimestre, dia_mes, dia_semana, distrito, concelho, unidades) AS
+CREATE VIEW Vendas(ean, cat, ano, trimestre, mes, dia_mes, dia_semana, distrito, concelho, unidades) AS
 SELECT P.ean, P.cat, extract(ano FROM ER.instante), extract(trimestre FROM ER.instante), extract(mes FROM ER.instante),
-extract(dia_semana FROM ER.instante),extract(distrito FROM L.local), extract(concelho FROM L.local), ER.unidades 
+extract(dia_mes FROM ER.instante), extract(dia_semana FROM ER.instante),extract(distrito FROM L.local),
+extract(concelho FROM L.local), ER.unidades 
 FROM produto P
 FULL JOIN categoria C
 ON  P.cat = C
