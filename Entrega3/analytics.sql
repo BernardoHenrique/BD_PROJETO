@@ -3,9 +3,9 @@
 
     SELECT dia_semana, concelho, SUM ( unidades ) AS Vendido
     FROM Vendas
-    WHERE instante BETWEEN datas
+    WHERE instante BETWEEN "31/09/2021" AND "17/06/2022"
     GROUP BY
-    GROUPING SETS ( (dia_semana), (concelho) , ( ) )
+    GROUPING SETS ( (dia_semana), (concelho) , () )
 
     /* olap 2*/
 

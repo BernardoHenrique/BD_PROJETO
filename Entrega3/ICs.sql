@@ -6,10 +6,31 @@ CREATE OR REPLACE FUNCTION	chk_cat_names_proc()
 RETURNS TRIGGER AS
 $$
 BEGIN			
-		IF	tem_outra.super_categoria.name == tem_outra.categoria.name	THEN			
-			RAISE	EXCEPTION	'Error'
-		END IF;	
-		RETURN tem_outra;
+		WITH RECURSIVE categorias AS (
+			SELECT
+				categoria,
+				super_categoria
+			FROM
+				tem_outra
+			WHERE
+				categoria = super_categoria
+			UNION
+				SELECT
+					c.categoria,
+					c.super_categoria
+				FROM
+					tem_outra c
+				INNER JOIN categorias cat ON cat.categoria = c.super_categoria
+		) SELECT
+			*
+		FROM
+			categorias;	
+		AS
+			final
+		IF	(SELECT count(*) AS nr_col FROM final) > 0 THEN
+			RAISE   EXCEPTION	'Error'
+		END IF;
+		RETURN categorias;
 END;
 $$	
 
@@ -22,12 +43,12 @@ CREATE OR REPLACE FUNCTION	chk_uni_number_proc()
 RETURNS TRIGGER AS
 $$
 BEGIN			
-		IF	evento_reposicao.num_serie == planograma.num_serie  THEN
-            IF evento_reposicao.unidades > planograma.unidades 			
+		IF (SELECT num_serie, unidades AS uni FROM evento_reposicao) NATURAL JOIN planograma AS A THEN
+            IF A.uni > A.unidades
 				RAISE   EXCEPTION	'Error'
             END IF;
 		END IF;	
-		RETURN evento_reposicao;
+		RETURN A;
 END;
 $$	
 
