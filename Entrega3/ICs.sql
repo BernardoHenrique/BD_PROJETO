@@ -1,4 +1,6 @@
 (RI-1) Uma Categoria não pode estar contida em si própria
+
+/* RECURSIVO */
 RI-1
 CREATE OR REPLACE FUNCTION	chk_cat_names_proc()	
 RETURNS TRIGGER AS
@@ -10,6 +12,8 @@ BEGIN
 		RETURN tem_outra;
 END;
 $$	
+
+/* PRIMERIO IF USAR NATURAL JOIN */
 
 (RI-4) O número de unidades repostas num Evento de Reposição não pode exceder o número de
 unidades especificado no Planograma
@@ -54,11 +58,9 @@ BEGIN
 				*
 			FROM
 				categorias;	
-			WHERE
-				ProdCat IN categorias
 			AS
 				final
-			IF	(SELECT count(*) AS nr_col FROM final) == 0 THEN
+			IF	(SELECT count(*) AS nr_col FROM final)  == 0 THEN
 				RAISE   EXCEPTION	'Error'
 			END IF;
 		END IF;	
