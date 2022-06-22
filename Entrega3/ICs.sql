@@ -43,8 +43,8 @@ CREATE OR REPLACE FUNCTION	chk_uni_number_proc()
 RETURNS TRIGGER AS
 $$
 BEGIN			
-		IF (SELECT num_serie, unidades AS uni FROM evento_reposicao) NATURAL JOIN planograma AS A THEN
-            IF A.uni > A.unidades
+		IF SELECT * FROM evento_reposicao.num_serie INNER JOIN planograma.num_serie THEN
+            IF evento_reposicao.unidades > planograma.unidades
 				RAISE   EXCEPTION	'Error'
             END IF;
 		END IF;	

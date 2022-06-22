@@ -20,11 +20,11 @@
 /* 7.1 */
 
 CREATE UNIQUE INDEX RP
-USING HASH
-on Reponsavel_por (nome_cat);
+on Reponsavel_por
+USING HASH(nome_cat);
 
 /* 7.2 */
 
 CREATE UNIQUE INDEX P
-USING BTREE
-on Produto (desc);
+on Produto
+USING BTREE(desc);
