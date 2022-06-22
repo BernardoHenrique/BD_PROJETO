@@ -80,10 +80,10 @@ create table prateleira
     constraint fk_prateleira_categoria foreign key(nome) references categoria(nome) on delete cascade);
 
 create table planograma
-   (ean  numeric(20,0)  not null  unique,
-    nro  numeric(20,0)    not null    unique,
-    num_serie  numeric(20,0)      not null    unique,
-    fabricante   varchar(80)    not null    unique,
+   (ean  numeric(20,0)  not null  ,
+    nro  numeric(20,0)    not null    ,
+    num_serie  numeric(20,0)      not null    ,
+    fabricante   varchar(80)    not null   ,
     faces   numeric(20,0)    not null,
     unidades    numeric(20,0) not null,
     loc   varchar(80)    not null,
@@ -99,17 +99,17 @@ create table retalhista
 create table responsavel_por
     (nome_cat varchar(80) not null,
     tin numeric(20,0) not null,
-    num_serie numeric(20,0) not null  unique,
-    fabricante varchar(80) not null unique,
+    num_serie numeric(20,0) not null ,
+    fabricante varchar(80) not null ,
     constraint fk_responsavel_por_IVM foreign key(num_serie, fabricante) references IVM(num_serie, fabricante) on delete cascade,
     constraint fk_responsavel_por_retalhista foreign key(tin) references retalhista(tin) on delete cascade,
     constraint fk_responsavel_nome_categoria foreign key(nome_cat) references categoria(nome) on delete cascade);
 
 create table evento_reposicao
-   (ean  numeric(20,0)  not null  unique,
-    nro  numeric(20,0)    not null    unique,
-    num_serie  numeric(20,0)      not null    unique,
-    fabricante   varchar(80)    not null    unique,
+   (ean  numeric(20,0)  not null,
+    nro  numeric(20,0)    not null,
+    num_serie  numeric(20,0)      not null,
+    fabricante   varchar(80)    not null,
     instante    varchar(80) not null,
     unidades    numeric(20,0) not null,
     tin     numeric(20,0)    not null,
@@ -198,8 +198,27 @@ insert into retalhista values (3354412054521, 'bonifacio');
 insert into retalhista values (9999999999999, 'jacaré');
 
 insert into responsavel_por values ('cervejas', 6546541654165, 0987654,'samsung');
+insert into responsavel_por values ('doces', 6546541654165, 0987654,'samsung');
 insert into responsavel_por values ('fruta', 9878465234840, 345689,'sony');
 insert into responsavel_por values ('almoço', 1564820156464, 54382490485785,'apple');
 insert into responsavel_por values ('jantar', 5484821214482, 2423567,'asus');
 insert into responsavel_por values ('agua', 8314530548760, 8765765436,'glorious');
 insert into responsavel_por values ('doces', 3354412054521, 586658943,'zara');
+
+insert into planograma values (239,2, 2423567, 'asus', 10, 30, 'ghetto' );
+insert into planograma values (373,4, 54382490485785, 'apple',4, 40, 'amieira' );
+insert into planograma values (302,4, 54382490485785, 'apple',7, 50, 'amieira' );
+insert into planograma values (915,4, 54382490485785, 'apple',2, 13, 'amieira');
+insert into planograma values (696,3, 345689, 'sony',4, 20, 'moita' );
+insert into planograma values (232,3, 345689, 'sony',6, 18, 'moita' );
+insert into planograma values (498,1, 0987654, 'samsung',2, 10, 'roubo');
+insert into planograma values (598,2, 2423567, 'asus',2, 10, 'ghetto');
+
+insert into evento_reposicao values (239,2, 2423567, 'asus', '11/08/2021 17h 53m 6s', 5, 5484821214482);
+insert into evento_reposicao values (373,4, 54382490485785, 'apple','12/02/2021 21h 1m 7s', 3, 1564820156464);
+insert into evento_reposicao values (302,4, 54382490485785, 'apple','29/09/2021 7h 33m 8s', 2, 1564820156464);
+insert into evento_reposicao values (915,4, 54382490485785, 'apple','21/03/2021 18h 43m 9s', 1, 1564820156464);
+insert into evento_reposicao values (696,3, 345689, 'sony','13/02/2021 17h 53m 6s', 5, 9878465234840);
+insert into evento_reposicao values (232,3, 345689, 'sony','15/05/2020 17h 53m 27s', 4, 9878465234840);
+insert into evento_reposicao values (498,1, 0987654, 'samsung','18/06/2022 13h 25m 8s', 2, 6546541654165);
+insert into evento_reposicao values (598,2, 2423567, 'asus','11/08/2021 23h 53m 56s', 1, 5484821214482);

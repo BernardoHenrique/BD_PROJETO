@@ -6,7 +6,7 @@ FROM Vendas
 WHERE instante BETWEEN "31/09/2021" AND "17/06/2022"
 GROUP BY
 /*GROUPING SETS ( (dia_semana), (concelho) , () )*/
-CUBE ( (dia_semana), (concelho));
+CUBE ((dia_semana), (concelho));
 
 /* olap 2*/
 
@@ -15,7 +15,7 @@ FROM Vendas
 WHERE distrito = "Lisboa"
 GROUP BY
 /*GROUPING SETS ( (concelho), (categoria) , (dia_semana), () )*/
-CUBE ( (concelho), (categoria) , (dia_semana));
+CUBE ((concelho), (categoria) , (dia_semana));
 
 /* INDICES */
 

@@ -10,7 +10,7 @@ BEGIN
 			FROM
 				tem_outra
 			WHERE
-				categoria = super_categoria
+				NEW.categoria = super_categoria
 			UNION
 				SELECT
 					c.categoria,
@@ -21,11 +21,9 @@ BEGIN
 		) SELECT
 			*
 		FROM
-			categorias	
-		AS
-			final
-		IF	(SELECT count(*) AS nr_col FROM final) > 0 THEN
-			RAISE   EXCEPTION	'Error'
+			categorias;
+		IF	(SELECT count(categoria) AS nr_col FROM categorias) > 0 THEN
+			RAISE   EXCEPTION	'Error';
 		END IF;
 		RETURN categorias;
 END;
@@ -36,11 +34,11 @@ CREATE OR REPLACE FUNCTION	chk_uni_number_proc()
 RETURNS TRIGGER AS
 $$
 BEGIN			
-		IF SELECT * FROM evento_reposicao.num_serie INNER JOIN planograma.num_serie THEN
-            IF evento_reposicao.unidades > planograma.unidades
-				RAISE   EXCEPTION	'Error'
-            END IF;
-		END IF;LANGUAGE plpgsql;	
+		IF NEW.evento_reposicao.unidades > (SELECT planograma.unidades FROM NEW.evento_reposicao INNER JOIN planograma ON
+		planograma.num_serie = NEW.evento_reposicao.num_serie AND planograma.ean = NEW.evento_reposicao.ean AND
+		planograma.nro = NEW.evento_reposicao.nro AND planograma.fabricante = NEW.evento_reposicao.fabricante) THEN
+			RAISE   EXCEPTION	'Error';
+		END IF;
 		RETURN A;
 END;
 $$	LANGUAGE plpgsql;
@@ -51,32 +49,28 @@ CREATE OR REPLACE FUNCTION	chk_cat_names_proc()
 RETURNS TRIGGER AS
 $$
 BEGIN	
-		IF	prateleria.nome != (SELECT cat FROM Produto WHERE Produto.ean IN evento_reposicao) AS ProdCat THEN
-			WITH RECURSIVE categorias AS (
-				SELECT
-					categoria,
-					super_categoria
-				FROM
-					tem_outra
-				WHERE
-					categoria = prateleria.nome
-				UNION
-					SELECT
-						c.categoria,
-						c.super_categoria
-					FROM
-						tem_outra c
-					INNER JOIN categorias cat ON cat.categoria = c.super_categoria
-			) SELECT
-				*
+		WITH RECURSIVE categorias AS (
+			SELECT
+				categoria,
+				super_categoria
 			FROM
-				categorias;	
-			AS
-				final
-			IF	(SELECT count(*) AS nr_col FROM final)  == 0 THEN
-				RAISE   EXCEPTION	'Error'
-			END IF;
-		END IF;	
+				tem_outra
+			WHERE
+				categoria = prateleira.nome
+			UNION
+				SELECT
+					c.categoria,
+					c.super_categoria
+				FROM
+					tem_outra c
+				INNER JOIN categorias cat ON cat.categoria = c.super_categoria
+		) SELECT
+			*
+		FROM
+			categorias;	
+		IF NEW.produto.nome NOT IN (SELECT categoria FROM categorias) THEN
+			RAISE   EXCEPTION	'Error';
+		END IF;
 		RETURN categorias;
 END;
 $$	LANGUAGE plpgsql;
