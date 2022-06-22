@@ -1,30 +1,32 @@
 /* OLAP QUERIES */
-    /* olap 1*/
+/* olap 1*/
 
-    SELECT dia_semana, concelho, SUM ( unidades ) AS Vendido
-    FROM Vendas
-    WHERE instante BETWEEN "31/09/2021" AND "17/06/2022"
-    GROUP BY
-    GROUPING SETS ( (dia_semana), (concelho) , () )
+SELECT dia_semana, concelho, SUM ( unidades ) AS Vendido
+FROM Vendas
+WHERE instante BETWEEN "31/09/2021" AND "17/06/2022"
+GROUP BY
+/*GROUPING SETS ( (dia_semana), (concelho) , () )*/
+CUBE ( (dia_semana), (concelho));
 
-    /* olap 2*/
+/* olap 2*/
 
-    SELECT dia_semana, distrito, concelho, categoria, SUM ( unidades ) AS Vendido
-    FROM Vendas
-    SLICE distrito = "Lisboa"
-    GROUP BY
-    GROUPING SETS ( (concelho), (categoria) , (dia_semana), () )
+SELECT dia_semana, distrito, concelho, categoria, SUM ( unidades ) AS Vendido
+FROM Vendas
+WHERE distrito = "Lisboa"
+GROUP BY
+/*GROUPING SETS ( (concelho), (categoria) , (dia_semana), () )*/
+CUBE ( (concelho), (categoria) , (dia_semana));
 
 /* INDICES */
 
 /* 7.1 */
 
-CREATE UNIQUE INDEX RP
-on Reponsavel_por
+CREATE INDEX RPP
+on responsavel_por
 USING HASH(nome_cat);
 
 /* 7.2 */
 
-CREATE UNIQUE INDEX P
+CREATE INDEX P
 on Produto
-USING BTREE(desc);
+USING BTREE(descr);
