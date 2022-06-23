@@ -110,7 +110,7 @@ create table evento_reposicao
     nro  numeric(20,0)    not null,
     num_serie  numeric(20,0)      not null,
     fabricante   varchar(80)    not null,
-    instante    varchar(80) not null,
+    instante    timestamp(6)  not null,
     unidades    numeric(20,0) not null,
     tin     numeric(20,0)    not null,
     constraint pk_evento_reposicao primary key(ean, nro, num_serie, fabricante, instante),
@@ -214,11 +214,11 @@ insert into planograma values (232,3, 345689, 'sony',6, 18, 'moita' );
 insert into planograma values (498,1, 0987654, 'samsung',2, 10, 'roubo');
 insert into planograma values (598,2, 2423567, 'asus',2, 10, 'ghetto');
 
-insert into evento_reposicao values (239,2, 2423567, 'asus', '11/08/2021 17h 53m 6s', 5, 5484821214482);
-insert into evento_reposicao values (373,4, 54382490485785, 'apple','12/02/2021 21h 1m 7s', 3, 1564820156464);
-insert into evento_reposicao values (302,4, 54382490485785, 'apple','29/09/2021 7h 33m 8s', 2, 1564820156464);
-insert into evento_reposicao values (915,4, 54382490485785, 'apple','21/03/2021 18h 43m 9s', 1, 1564820156464);
-insert into evento_reposicao values (696,3, 345689, 'sony','13/02/2021 17h 53m 6s', 5, 9878465234840);
-insert into evento_reposicao values (232,3, 345689, 'sony','15/05/2020 17h 53m 27s', 4, 9878465234840);
-insert into evento_reposicao values (498,1, 0987654, 'samsung','18/06/2022 13h 25m 8s', 2, 6546541654165);
-insert into evento_reposicao values (598,2, 2423567, 'asus','11/08/2021 23h 53m 56s', 1, 5484821214482);
+insert into evento_reposicao values (239,2, 2423567, 'asus', '1999-01-08 04:05:06', 5, 5484821214482);
+insert into evento_reposicao values (373,4, 54382490485785, 'apple','2004-02-14 05:29:46', 3, 1564820156464);
+insert into evento_reposicao values (302,4, 54382490485785, 'apple','2022-03-25 10:57:56', 2, 1564820156464);
+insert into evento_reposicao values (915,4, 54382490485785, 'apple','2021-09-28 11:35:26', 1, 1564820156464);
+insert into evento_reposicao values (696,3, 345689, 'sony','2020-02-16 01:46:54', 5, 9878465234840);
+insert into evento_reposicao values (232,3, 345689, 'sony','2019-04-19 07:58:37', 4, 9878465234840);
+insert into evento_reposicao values (498,1, 0987654, 'samsung','2010-05-25 19:23:28', 2, 6546541654165);
+insert into evento_reposicao values (598,2, 2423567, 'asus','2021-07-26 15:26:47', 1, 5484821214482);

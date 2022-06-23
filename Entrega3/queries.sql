@@ -8,13 +8,17 @@ WHERE count >= ALL(SELECT COUNT(tin) AS count
     FROM retalhista NATURAL JOIN responsavel_por
     GROUP BY tin);
 
-
-SELECT name             /*2*/
-FROM ((
-    SELECT tin
-    FROM responsavel_por NATURAL JOIN categoria_simples
-    GROUP BY tin) AS sub
-    NATURAL JOIN retalhista
+/* 2 */
+SELECT DISTINCT name
+FROM retalhista rd
+WHERE NOT EXISTS(
+    SELECT nome
+    FROM categoria_simples
+    EXCEPT
+    SELECT nome_cat
+    FROM (responsavel_por A JOIN retalhista r 
+        on A.tin = r.tin) AC
+    WHERE AC.name = rd.name    
 );
 
 
