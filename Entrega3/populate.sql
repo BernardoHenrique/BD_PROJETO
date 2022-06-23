@@ -1,19 +1,18 @@
-drop table categoria cascade;
-drop table categoria_simples cascade;
-drop table super_categoria cascade;
-drop table tem_outra cascade;
-drop table produto cascade;
-drop table tem_categoria cascade;
-drop table IVM cascade;
-drop table ponto_de_retalho cascade;
-drop table instalada_em cascade;
-drop table prateleira cascade;
-drop table planograma cascade;
-drop table retalhista cascade;
-drop table responsavel_por cascade;
-drop table evento_reposicao cascade;
-
-
+/*drop table if exists categoria cascade;
+drop table if exists categoria_simples cascade;
+drop table if exists super_categoria cascade;
+drop table if exists tem_outra cascade;
+drop table if exists produto cascade;
+drop table if exists tem_categoria cascade;
+drop table if exists IVM cascade;
+drop table if exists ponto_de_retalho cascade;
+drop table if exists instalada_em cascade;
+drop table if exists prateleira cascade;
+drop table if exists planograma cascade;
+drop table if exists retalhista cascade;
+drop table if exists responsavel_por cascade;
+drop table if exists evento_reposicao cascade;
+*/
 create table categoria
    (nome  varchar(80)	not null    unique,
     constraint pk_categoria primary key(nome));
@@ -26,7 +25,7 @@ create table categoria_simples
 create table super_categoria
    (nome varchar(80)	not null    unique,
     constraint pk_super_categoria primary key(nome),
-    constraint fk_super_categoria_categoria foreign key(nome) references categoria(nome));
+    constraint fk_super_categoria_categoria foreign key(nome) references categoria(nome) on delete cascade);
 
 
 create table tem_outra
