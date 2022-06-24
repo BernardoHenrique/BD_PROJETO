@@ -61,23 +61,24 @@ def retalhistas():
         cursor.close()
         dbConn.close()
 
-app.route("/listarEventos")
-def listarIVM():
+@app.route("/listIVM")
+def listIVM():
     dbConn = None
     cursor = None
     try:
         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        query = "SELECT * FROM IVM;"
+        query = "SELECT * FROM ivm;"
         cursor.execute(query)
-        return render_template("listarEventos.html", cursor=cursor, params=request.args)
+        return render_template("listarIVM.html", cursor = cursor)
     except Exception as e:
         return str(e)
     finally:
+        dbConn.commit()
         cursor.close()
         dbConn.close()
 
-@app.route("/listarCat>")
+@app.route("/listarCat")
 def listSubCats(superCat = None):
     dbConn = None
     cursor = None
@@ -86,12 +87,26 @@ def listSubCats(superCat = None):
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         query = "SELECT * FROM super_categoria;"
         cursor.execute(query)
-        return render_template("listarCat.html", cursor=cursor)
+        return render_template("listarCat.html", cursor=cursor, params=request.args)
     except Exception as e:
         return str(e)
     finally:
         cursor.close()
         dbConn.close()
+
+@app.route("/addCat")
+def createCatPage():
+    try:
+        return render_template("addCategoria.html")
+    except Exception as e:
+        return str(e)
+
+@app.route("/addRetalhista")
+def createRetPage():
+    try:
+        return render_template("addRetalhista.html")
+    except Exception as e:
+        return str(e)
 
 @app.route("/removeCat/<nome_cat>", methods=["GET"])
 def remove_cat(nome_cat = None):
@@ -112,7 +127,6 @@ def remove_cat(nome_cat = None):
         cursor.close()
         dbConn.close()
 
-
 @app.route("/removeRetalhista/<tin>", methods=["GET"])
 def remove_ret(tin = None):
     dbConn = None
@@ -132,21 +146,42 @@ def remove_ret(tin = None):
         cursor.close()
         dbConn.close()
 
-@app.route("/listIVM/<IVM>", methods=["GET"])
-def listRepOfIvm(IVM = None):
+@app.route("/listSubCat/<superCategoria>")
+def listSubCat(superCategoria = None):
     dbConn = None
     cursor = None
     try:
         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
-        query = "SELECT * FROM ivm NATURAL JOIN evento_reposicao WHERE (num_serie = '{int(IVM)}');"
+        #query = "SELECT categoria FROM tem_outra WHERE (super_categoria =" + "'" + superCategoria + "');"
+        query = "WITH RECURSIVE subCategoria AS (\
+        SELECT super_categoria, categoria FROM tem_outra\
+        WHERE super_categoria = " + "'" + superCategoria + "'\
+        UNION SELECT tem_outra.categoria, tem_outra.super_categoria\
+            FROM tem_outra\
+            INNER JOIN subCategoria ON subCategoria.categoria = tem_outra.super_categoria\
+        ) SELECT categoria FROM subCategoria;"
         cursor.execute(query)
-        return render_template("listRepOfIvm.html", cursor = cursor, IVM = IVM)
+        return render_template("listSubCat.html", cursor = cursor, superCategoria = superCategoria)
     except Exception as e:
         return str(e)
     finally:
-        dbConn.commit()
+        cursor.close()
+        dbConn.close()
+
+@app.route("/listarEventos/<ivm>")
+def listarEventos(ivm = None):
+    dbConn = None
+    cursor = None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        query = "SELECT * FROM evento_reposicao NATURAL JOIN tem_categoria WHERE (num_serie =" + "'" + ivm + "');"
+        cursor.execute(query)
+        return render_template("listarEventosIVM.html", cursor=cursor, ivm = ivm)
+    except Exception as e:
+        return str(e)
+    finally:
         cursor.close()
         dbConn.close()
 

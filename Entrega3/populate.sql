@@ -120,6 +120,7 @@ create table evento_reposicao
 insert into categoria values ('cervejas');
 insert into categoria values ('fruta');
 insert into categoria values ('almoço');
+insert into categoria values ('refeicao');
 insert into categoria values ('jantar');
 insert into categoria values ('agua');
 insert into categoria values ('doces');
@@ -129,11 +130,13 @@ insert into categoria_simples values ('jantar');
 
 insert into super_categoria values ('almoço');
 insert into super_categoria values ('jantar');
+insert into super_categoria values ('refeicao');
 
 insert into tem_outra values ('jantar', 'agua');
 insert into tem_outra values ('jantar', 'fruta');
 insert into tem_outra values ('almoço', 'cervejas');
 insert into tem_outra values ('almoço', 'doces');
+insert into tem_outra values ('refeicao', 'jantar');
 
 insert into produto values (239,'cervejas','heineken');
 insert into produto values (373,'cervejas','superbock');

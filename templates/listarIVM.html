@@ -9,10 +9,9 @@
     <table border="2px">
         <thead>
             <tr>
-                <th>Tin</th>
-                <th>Nome</th>
-                <th>Remover</th>
-                <th>Adicionar</th>
+                <th>num_serie</th>
+                <th>fabricante</th>
+                <th>Listar</th>
             </tr>
         </thead>
         <tbody>
@@ -20,8 +19,7 @@
                 <tr>
                     <td>{{ record[0] }}</td>
                     <td>{{ record[1] }}</td>
-                    <td><a href="removeRetalhista/{{record[0]}}">Remover
-                    <td><a href="addRetalhista/{{record[0]}}">Adicionar
+                    <td><a href="listarEventos/{{record[0]}}">Listar
                     </a></td>
                 </tr>
             {% endfor %}
